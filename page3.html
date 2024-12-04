@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Other page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="styles2.css" />
+    <script type="module" src="script2.js"></script>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/page2.html" aria-current="page">Other page2</a>
+      <a href="/page3.html" aria-current="page">Other page3</a>
+    </nav>
+    <main>
+      <h1>My other page 2</h1>
+
+      <div class="container">
+        <div class="menu">
+          <ul>
+            <li onmouseover="changeContent(0)">Menü 1</li>
+            <li onmouseover="changeContent(1)">Menü 2</li>
+            <li onmouseover="changeContent(2)">Menü 3</li>
+            <li onmouseover="changeContent(3)">Menü 4</li>
+            <li onmouseover="changeContent(4)">Menü 5</li>
+            <li onmouseover="changeContent(5)">Menü 6</li>
+          </ul>
+        </div>
+        <div class="content">
+          <div class="text" id="text">
+            <p>Metin 1</p>
+            <p>Metin 2</p>
+            <p>Metin 3</p>
+          </div>
+          <div class="images">
+            <img
+              id="image"
+              src="https://via.placeholder.com/300"
+              alt="Fotoğraf"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="script2.js"></script>
+  </body>
+</html>

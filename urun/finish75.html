@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dinamik Textbox Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+      .container {
+        max-width: 1700px;
+        margin: auto;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        background: #fff;
+      }
+      .title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .menu-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .menu-row select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      .header-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .header-row div {
+        width: 100px;
+      }
+      .header-row div:first-child {
+        width: 120px;
+        text-align: left;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .row label {
+        width: 120px;
+        font-weight: bold;
+      }
+      .row input {
+        width: 100px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="menu-row">
+        <div class="title">Dinamik Textbox Form</div>
+        <select id="websiteSelector" onchange="openWebsite()">
+          <option value="">Finish 75</option>
+          <option
+            value="https://stackblitzstarters699pdz-bftf--8080--d3acb9e1.local-credentialless.webcontainer.io/urun/finish85.html"
+          >
+            Finish 85
+          </option>
+          <option value="https://partner.trendyol.com/pricing/badge">
+            Avantajlı Ürün Etiketleri
+          </option>
+          <option value="https://partner.trendyol.com/pricing/flash">
+            Flaş Ürünler
+          </option>
+          <option value="https://partner.trendyol.com/product-listing">
+            Ürün Listesi
+          </option>
+          <option
+            value="https://partner.trendyol.com/orders/shipment-packages/created"
+          >
+            Siparişler
+          </option>
+          <option
+            value="https://partner.trendyol.com/promotions/coupons/create?microExport=true"
+          >
+            Mikro İhracat Kuponlar
+          </option>
+          <option
+            value="https://www.trendyol.com/magaza/turqstore-m-387438?sst=0"
+          >
+            Turqstore
+          </option>
+          <option
+            value="https://partner.trendyol.com/add-from-catalog/search?searchTerm=75%20fairy&searchType=searchByName"
+          >
+            Listeleme Katalogdan
+          </option>
+          <option value="https://bizimhesap.com/web/ngn/doc/ngnretailpurchases">
+            Bizimhesap ALIŞLAR
+          </option>
+        </select>
+      </div>
+
+      <!-- Kolon Başlıkları -->
+      <div class="header-row">
+        <div>Satır Adı</div>
+        <div>Giriş</div>
+        <div>Net kalan 15</div>
+        <div>Net kalan 12,5</div>
+        <div>Net kalan 7,1</div>
+        <div>Net kalan 4,5</div>
+        <div>Net kalan 15</div>
+      </div>
+
+      <!-- Dinamik satırlar -->
+      <div class="row">
+        <label for="input1">Satır 1:</label>
+        <input
+          type="number"
+          id="input1"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 1)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input2">Satır 2:</label>
+        <input
+          type="number"
+          id="input2"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 2)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input3">Satır 3:</label>
+        <input
+          type="number"
+          id="input3"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 3)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input4">Satır 4:</label>
+        <input
+          type="number"
+          id="input4"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 4)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input5">Satır 5:</label>
+        <input
+          type="number"
+          id="input5"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 5)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+    </div>
+
+    <script>
+      // Dinamik değerleri güncelleyen fonksiyon
+      function updateValues(inputElement, rowNumber) {
+        const value = parseFloat(inputElement.value) || 0; // Değer sayıya dönüştürülür
+        const row = inputElement.parentElement; // Mevcut satır
+        const outputs = row.querySelectorAll('input[readonly]'); // Sağdaki kutular
+
+        // Her bir sağ kutuyu güncelle
+        outputs[0].value = value * 0.85 - 60; // x2
+        outputs[1].value = value * 0.875 - 60; // x3
+        outputs[2].value = value * 0.929 - 60; // x4
+        outputs[3].value = value * 0.955 - 60; // x5
+        outputs[4].value = value * 0.85 - 60; // x6
+      }
+
+      // Açılır menüden seçilen web sitesini açan fonksiyon
+      function openWebsite() {
+        const selector = document.getElementById('websiteSelector');
+        const url = selector.value;
+
+        if (url) {
+          window.open(url, '_blank'); // Yeni sekmede siteyi açar
+        }
+      }
+
+      // Sayfa kapanmadan önce değerleri kaydeder
+      window.addEventListener('beforeunload', () => {
+        const data = [];
+        document.querySelectorAll('.row').forEach((row) => {
+          const inputs = Array.from(
+            row.querySelectorAll("input[type='number']")
+          );
+          if (inputs.length) {
+            data.push(inputs[0].value || ''); // Sadece giriş kutusunu kaydediyoruz
+          }
+        });
+        localStorage.setItem('formValues', JSON.stringify(data)); // LocalStorage'a kaydet
+      });
+
+      // Sayfa yüklendiğinde kaydedilen değerleri geri yükler
+      window.addEventListener('load', () => {
+        const data = JSON.parse(localStorage.getItem('formValues') || '[]');
+        document.querySelectorAll('.row').forEach((row, index) => {
+          const input = row.querySelector("input[type='number']");
+          if (input && data[index] !== undefined) {
+            input.value = data[index];
+            input.dispatchEvent(new Event('input')); // Değerleri otomatik hesaplatır
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

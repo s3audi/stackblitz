@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dinamik Textbox Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        background-color: #f9f9f9;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 1800px;
+        margin: auto;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .row label {
+        width: 300px;
+        font-weight: bold;
+      }
+      .row input {
+        width: 200px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Dinamik Textbox Form</h2>
+      <!-- Dinamik satırlar -->
+      <div class="row">
+        <label for="input1">Satır 1 Açıklama:</label>
+        <input
+          type="number"
+          id="input1"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 1)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input2">Satır 2:</label>
+        <input
+          type="number"
+          id="input2"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 2)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input3">Satır 3:</label>
+        <input
+          type="number"
+          id="input3"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 3)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input4">Satır 4:</label>
+        <input
+          type="number"
+          id="input4"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 4)"
+        />
+        <input type="text" readonly placeholder="x2" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+      <div class="row">
+        <label for="input5">Satır 5:</label>
+        <input
+          type="number"
+          id="input5"
+          placeholder="Giriniz"
+          oninput="updateValues(this, 5)"
+        />
+        <input type="text" readonly placeholder="Fiyatlama: (A*1,15) +60" />
+        <input type="text" readonly placeholder="x3" />
+        <input type="text" readonly placeholder="x4" />
+        <input type="text" readonly placeholder="x5" />
+        <input type="text" readonly placeholder="x6" />
+      </div>
+    </div>
+
+    <script>
+      // Dinamik değerleri güncelleyen fonksiyon
+      function updateValues(inputElement, rowNumber) {
+        const value = parseFloat(inputElement.value) || 0; // Değer sayıya dönüştürülür
+        const row = inputElement.parentElement; // Mevcut satır
+        const outputs = row.querySelectorAll('input[readonly]'); // Sağdaki kutular
+
+        // Her bir sağ kutuyu güncelle
+        outputs[0].value = (value * 115) / 100 - 60; // x2
+        outputs[1].value = value * 3; // x3
+        outputs[2].value = value * 4; // x4
+        outputs[3].value = value * 5; // x5
+        outputs[4].value = value * 6; // x6
+      }
+    </script>
+  </body>
+</html>

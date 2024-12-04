@@ -1,0 +1,77 @@
+/* Genel stil */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* Tab başlıkları */
+.tabs {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+}
+
+.tab-titles {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #f1f1f1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+.tab-titles li {
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab-titles li:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Tab içerikleri */
+.tab-content {
+  border-top: 1px solid #ccc;
+  padding: 20px;
+}
+
+/* Tab içeriklerini gizleme */
+.tab-panel {
+  display: none;
+}
+
+/* Hover ile tab gösterimi */
+.tab-titles li:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Hover edilen tab'ın içeriğini gösterme */
+.tab-titles li:hover ~ .tab-content .tab-panel[data-tab='tab1'] {
+  display: block;
+}
+
+.tab-titles li:nth-child(2):hover ~ .tab-content .tab-panel[data-tab='tab2'] {
+  display: block;
+}
+
+.tab-titles li:nth-child(3):hover ~ .tab-content .tab-panel[data-tab='tab3'] {
+  display: block;
+}
+
+.tab-titles li:nth-child(4):hover ~ .tab-content .tab-panel[data-tab='tab4'] {
+  display: block;
+}
+
+/* İçerik düzeni */
+p {
+  margin: 0;
+  padding: 0;
+}
