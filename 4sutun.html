@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 Sütunlu Link Preview & Shortcut</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .column {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .column input, button {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 95%;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .preview {
+            text-align: center;
+        }
+        .placeholder {
+            color: #999;
+            font-size: 16px;
+            margin-top: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="column">
+        <h2>Kelime Gir</h2>
+        <input type="text" id="wordInput" placeholder="Bir kelime yazın...">
+        <button onclick="generateLinks()">Güncelle</button>
+    </div>
+    <div class="column links" id="linkColumn">
+        <h2>Oluşturulan Linkler</h2>
+        <!-- Linkler buraya eklenecek -->
+    </div>
+    <div class="column preview" id="previewColumn">
+        <h2>Önizleme</h2>
+        <div class="placeholder">Link üzerine gelin...</div>
+    </div>
+
+    <script>
+        let linkArray = []; // Linkleri tutmak için bir dizi
+
+        function generateLinks() {
+            const input = document.getElementById('wordInput').value.trim();
+            const linkColumn = document.getElementById('linkColumn');
+            const previewColumn = document.getElementById('previewColumn');
+
+            // Sağ sütunu ve önizleme sütununu temizle
+            linkColumn.innerHTML = '<h2>Oluşturulan Linkler</h2>';
+            previewColumn.innerHTML = '<h2>Önizleme</h2><div class="placeholder">Link üzerine gelin...</div>';
+            linkArray = []; // Önceki linkleri temizle
+
+            if (input === '') {
+                linkColumn.innerHTML += '<p>Lütfen bir kelime girin.</p>';
+                return;
+            }
+
+            // Concatenate formülleri ile 10 farklı link oluştur
+            const baseUrls = [
+                'https://example.com/search?q=',
+                'https://anotherexample.com/find/',
+                'https://yetanother.com/query/',
+                'https://testsite.com/item/',
+                'https://myapp.com/result/',
+                'https://coolapp.com/view/',
+                'https://website.com/products/',
+                'https://appstore.com/apps/',
+                'https://service.com/tools/',
+                'https://platform.com/info/'
+            ];
+
+            baseUrls.forEach((baseUrl, index) => {
+                const fullUrl = baseUrl + encodeURIComponent(input);
+                const link = document.createElement('a');
+                link.href = fullUrl;
+                link.textContent = `Link ${index + 1}: ${fullUrl}`;
+                link.target = '_blank'; // Yeni sekmede aç
+                
+                // Linki diziye ekle
+                linkArray.push(fullUrl);
+
+                // Mouse rollover için event listener
+                link.addEventListener('mouseover', () => showPreview(fullUrl));
+                link.addEventListener('mouseout', () => clearPreview());
+                
+                linkColumn.appendChild(link);
+            });
+        }
+
+        function showPreview(url) {
+            const previewColumn = document.getElementById('previewColumn');
+            previewColumn.innerHTML = '<h2>Önizleme</h2>';
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            previewColumn.appendChild(iframe);
+        }
+
+        function clearPreview() {
+            const previewColumn = document.getElementById('previewColumn');
+            previewColumn.innerHTML = '<h2>Önizleme</h2><div class="placeholder">Link üzerine gelin...</div>';
+        }
+
+        // Klavye kısayollarını dinle
+        document.addEventListener('keydown', (event) => {
+            const key = parseInt(event.key); // Basılan tuş
+            if (key >= 1 && key <= 10 && linkArray[key - 1]) {
+                window.open(linkArray[key - 1], '_blank');
+            }
+        });
+    </script>
+</body>
+</html>
