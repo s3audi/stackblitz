@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 Sütunlu Link Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .column {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .column input, button {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 95%;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="column">
+        <h2>Kelime Gir</h2>
+        <input type="text" id="wordInput" placeholder="Bir kelime yazın...">
+        <button onclick="generateLinks()">Güncelle</button>
+    </div>
+    <div class="column links" id="linkColumn">
+        <h2>Oluşturulan Linkler</h2>
+        <!-- Linkler buraya eklenecek -->
+    </div>
+
+    <script>
+        function generateLinks() {
+            const input = document.getElementById('wordInput').value.trim();
+            const linkColumn = document.getElementById('linkColumn');
+            
+            // Sağ sütunu temizle
+            linkColumn.innerHTML = '<h2>Oluşturulan Linkler</h2>';
+
+            if (input === '') {
+                linkColumn.innerHTML += '<p>Lütfen bir kelime girin.</p>';
+                return;
+            }
+
+            // Concatenate formülleri ile 10 farklı link oluştur
+            const baseUrls = [
+                'https://example.com/search?q=',
+                'https://anotherexample.com/find/',
+                'https://yetanother.com/query/',
+                'https://testsite.com/item/',
+                'https://myapp.com/result/',
+                'https://coolapp.com/view/',
+                'https://website.com/products/',
+                'https://appstore.com/apps/',
+                'https://service.com/tools/',
+                'https://platform.com/info/'
+            ];
+
+            baseUrls.forEach((baseUrl, index) => {
+                const link = document.createElement('a');
+                link.href = baseUrl + encodeURIComponent(input);
+                link.textContent = `Link ${index + 1}: ${baseUrl + input}`;
+                link.target = '_blank'; // Yeni sekmede aç
+                linkColumn.appendChild(link);
+            });
+        }
+    </script>
+</body>
+</html>
