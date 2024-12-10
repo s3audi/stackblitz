@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coda API Data</title>
+    <script>
+        async function fetchCodaTable() {
+            const apiToken = '86a542c4-2db6-4bba-8da5-8cb667b24020'; // Buraya kendi API tokenınızı koyun.
+            const docId = 'Trendyol_dlfs7srE6nn'; // Doküman ID'nizi buraya ekleyin.
+            const tableId = 'grid-ZD9fsfIgEl'; // Tablo ID'nizi buraya ekleyin.
+
+            const response = await fetch(`https://coda.io/apis/v1/docs/${docId}/tables/${tableId}/rows`, {
+                headers: {
+                    Authorization: `Bearer ${apiToken}`
+                }
+            });
+            
+            const data = await response.json();
+            const rows = data.items;
+
+            const table = document.createElement('table');
+            table.border = '1';
+            table.style.width = '100%';
+
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row.values).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+
+            document.body.appendChild(table);
+        }
+
+        window.onload = fetchCodaTable;
+    </script>
+</head>
+<body>
+    <h1>Dynamic Coda Table</h1>
+</body>
+</html>
