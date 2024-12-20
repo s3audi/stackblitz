@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Link Generator</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .left-panel {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 80%;
+            padding: 10px;
+        }
+
+        .textbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .textbox-container input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .link-container {
+            margin-top: 10px;
+        }
+
+        .link-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            cursor: grab;
+        }
+
+        .link-row a {
+            flex: 1;
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .link-row a:hover {
+            text-decoration: underline;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        button.delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        button.delete-button:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <div class="textbox-container">
+            <input type="text" id="textbox1" placeholder="Enter URL here">
+            <input type="text" id="linkName1" placeholder="Enter Link Name">
+            <button onclick="addLink('textbox1', 'linkName1')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox2" placeholder="Enter URL here">
+            <input type="text" id="linkName2" placeholder="Enter Link Name">
+            <button onclick="addLink('textbox2', 'linkName2')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox3" placeholder="Enter URL here">
+            <input type="text" id="linkName3" placeholder="Enter Link Name">
+            <button onclick="addLink('textbox3', 'linkName3')">Add Link</button>
+        </div>
+        <div class="link-container" id="linkContainer">
+            <!-- Links will be dynamically added here -->
+        </div>
+    </div>
+    <div class="right-panel">
+        <iframe id="contentDisplay" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Klavye tuşlarına göre link açma işlemi
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            if (key >= 1 && key <= 9) {  // 1-9 arası tuşlar
+                openLinkByIndex(key - 1);  // 1 tuşu, index 0'daki linki açar
+            }
+        });
+
+        function openLinkByIndex(index) {
+            const links = document.querySelectorAll('#linkContainer .link-row a');
+            if (links[index]) {
+                links[index].click(); // İlgili linki tıkla
+            }
+        }
+
+        // Link ekleme fonksiyonu
+        function addLink(urlTextboxId, nameTextboxId) {
+            const urlTextbox = document.getElementById(urlTextboxId);
+            const linkNameTextbox = document.getElementById(nameTextboxId);
+            const url = urlTextbox.value.trim();
+            const linkName = linkNameTextbox.value.trim();
+
+            if (url && linkName) {
+                const linkContainer = document.getElementById('linkContainer');
+
+                const row = document.createElement('div');
+                row.className = 'link-row';
+                row.draggable = true;
+
+                // Yeni linki oluşturuyoruz
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = linkName;  // Kısa link ismini göster
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(url);
+                link.dataset.index = linkContainer.children.length; // Linkin sırasını kaydet
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => {
+                    row.remove();
+                    saveLinks();
+                };
+
+                row.appendChild(link);
+                row.appendChild(deleteButton);
+                linkContainer.appendChild(row);
+
+                urlTextbox.value = '';
+                linkNameTextbox.value = '';  // Link adı kutusunu temizle
+                saveLinks();
+                addDragAndDrop();
+            } else {
+                alert('Please enter both a valid URL and a link name.');
+            }
+        }
+
+        // URL içeriğini iframe'de göster
+        function updateContent(url) {
+            const contentDisplay = document.getElementById('contentDisplay');
+            contentDisplay.src = url;
+        }
+
+        // Linkleri yerel depolama (localStorage) ile kaydetme
+        function saveLinks() {
+            const rows = document.querySelectorAll('#linkContainer .link-row');
+            const linkArray = Array.from(rows).map(row => {
+                const link = row.querySelector('a');
+                return { url: link.href, name: link.textContent };
+            });
+            localStorage.setItem('savedLinks', JSON.stringify(linkArray));
+        }
+
+        // Sayfa yüklendiğinde kaydedilen linkleri yükle
+        window.onload = function() {
+            const savedLinks = JSON.parse(localStorage.getItem('savedLinks') || '[]');
+            const linkContainer = document.getElementById('linkContainer');
+            savedLinks.forEach((linkData, index) => {
+                const row = document.createElement('div');
+                row.className = 'link-row';
+                row.draggable = true;
+
+                const link = document.createElement('a');
+                link.href = linkData.url;
+                link.textContent = linkData.name;  // Kısa link ismini göster
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(linkData.url);
+                link.dataset.index = index; // Linkin sırasını kaydet
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => {
+                    row.remove();
+                    saveLinks();
+                };
+
+                row.appendChild(link);
+                row.appendChild(deleteButton);
+                linkContainer.appendChild(row);
+            });
+        };
+    </script>
+</body>
+</html>

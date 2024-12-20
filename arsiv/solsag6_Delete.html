@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Link Generator</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .left-panel {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 80%;
+            padding: 10px;
+        }
+
+        .textbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .textbox-container input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .link-container {
+            margin-top: 10px;
+        }
+
+        .link-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            cursor: grab;
+        }
+
+        .link-row a {
+            flex: 1;
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .link-row a:hover {
+            text-decoration: underline;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        button.delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        button.delete-button:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <div class="textbox-container">
+            <input type="text" id="textbox1" placeholder="Enter URL here">
+            <button onclick="addLink('textbox1')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox2" placeholder="Enter URL here">
+            <button onclick="addLink('textbox2')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox3" placeholder="Enter URL here">
+            <button onclick="addLink('textbox3')">Add Link</button>
+        </div>
+        <button onclick="saveLinks()">Save Links</button>
+        <button onclick="loadLinks()">Load Links</button>
+        <button onclick="clearLinks()">Clear Links</button>
+        <div class="link-container" id="linkContainer">
+            <!-- Links will be dynamically added here -->
+        </div>
+    </div>
+    <div class="right-panel">
+        <iframe id="contentDisplay" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        function addLink(textboxId) {
+            const textbox = document.getElementById(textboxId);
+            const url = textbox.value.trim();
+            if (url) {
+                const linkContainer = document.getElementById('linkContainer');
+
+                const row = document.createElement('div');
+                row.className = 'link-row';
+                row.draggable = true;
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = url.length > 30 ? `...${url.slice(-30)}` : url;
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(url);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => {
+                    row.remove();
+                    saveLinks();
+                };
+
+                row.appendChild(link);
+                row.appendChild(deleteButton);
+                linkContainer.appendChild(row);
+
+                textbox.value = '';
+                saveLinks();
+                addDragAndDrop();
+            } else {
+                alert('Please enter a valid URL.');
+            }
+        }
+
+        function updateContent(url) {
+            const contentDisplay = document.getElementById('contentDisplay');
+            contentDisplay.src = url;
+        }
+
+        function saveLinks() {
+            const rows = document.querySelectorAll('#linkContainer .link-row');
+            const linkArray = Array.from(rows).map(row => row.querySelector('a').href);
+            localStorage.setItem('savedLinks', JSON.stringify(linkArray));
+        }
+
+        function loadLinks() {
+            const savedLinks = JSON.parse(localStorage.getItem('savedLinks') || '[]');
+            const linkContainer = document.getElementById('linkContainer');
+            linkContainer.innerHTML = '';
+
+            savedLinks.forEach(url => {
+                const row = document.createElement('div');
+                row.className = 'link-row';
+                row.draggable = true;
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = url.length > 30 ? `...${url.slice(-30)}` : url;
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(url);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => {
+                    row.remove();
+                    saveLinks();
+                };
+
+                row.appendChild(link);
+                row.appendChild(deleteButton);
+                linkContainer.appendChild(row);
+            });
+
+            addDragAndDrop();
+        }
+
+        function clearLinks() {
+            if (confirm('Are you sure you want to clear all links?')) {
+                localStorage.removeItem('savedLinks');
+                document.getElementById('linkContainer').innerHTML = '';
+                alert('All links have been cleared!');
+            }
+        }
+
+        function addDragAndDrop() {
+            const linkContainer = document.getElementById('linkContainer');
+            const rows = document.querySelectorAll('#linkContainer .link-row');
+
+            rows.forEach(row => {
+                row.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', Array.from(rows).indexOf(row));
+                };
+
+                row.ondragover = (e) => {
+                    e.preventDefault();
+                };
+
+                row.ondrop = (e) => {
+                    e.preventDefault();
+                    const draggedIndex = e.dataTransfer.getData('text/plain');
+                    const targetIndex = Array.from(rows).indexOf(row);
+
+                    if (draggedIndex !== targetIndex) {
+                        const draggedRow = rows[draggedIndex];
+                        linkContainer.insertBefore(draggedRow, rows[targetIndex]);
+                        saveLinks();
+                    }
+                };
+            });
+        }
+
+        // Load links on page load
+        window.onload = loadLinks;
+    </script>
+</body>
+</html>

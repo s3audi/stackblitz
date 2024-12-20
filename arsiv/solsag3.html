@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Link Generator</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .left-panel {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            width: 80%;
+            padding: 10px;
+        }
+
+        .textbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .textbox-container input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .link-container {
+            margin-top: 10px;
+        }
+
+        .link-container a {
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .link-container a:hover {
+            text-decoration: underline;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <div class="textbox-container">
+            <input type="text" id="textbox1" placeholder="Enter URL here">
+            <button onclick="addLink('textbox1')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox2" placeholder="Enter URL here">
+            <button onclick="addLink('textbox2')">Add Link</button>
+        </div>
+        <div class="textbox-container">
+            <input type="text" id="textbox3" placeholder="Enter URL here">
+            <button onclick="addLink('textbox3')">Add Link</button>
+        </div>
+        <button onclick="saveLinks()">Save Links</button>
+        <button onclick="loadLinks()">Load Links</button>
+        <button onclick="clearLinks()">Clear Links</button>
+        <div class="link-container" id="linkContainer">
+            <!-- Links will be dynamically added here -->
+        </div>
+    </div>
+    <div class="right-panel">
+        <iframe id="contentDisplay" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        function addLink(textboxId) {
+            const textbox = document.getElementById(textboxId);
+            const url = textbox.value.trim();
+            if (url) {
+                const linkContainer = document.getElementById('linkContainer');
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = url;
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(url);
+
+                linkContainer.appendChild(link);
+                textbox.value = '';
+            } else {
+                alert('Please enter a valid URL.');
+            }
+        }
+
+        function updateContent(url) {
+            const contentDisplay = document.getElementById('contentDisplay');
+            contentDisplay.src = url;
+        }
+
+        function saveLinks() {
+            const links = document.querySelectorAll('#linkContainer a');
+            const linkArray = Array.from(links).map(link => link.href);
+            localStorage.setItem('savedLinks', JSON.stringify(linkArray));
+            alert('Links saved!');
+        }
+
+        function loadLinks() {
+            const savedLinks = JSON.parse(localStorage.getItem('savedLinks') || '[]');
+            const linkContainer = document.getElementById('linkContainer');
+            linkContainer.innerHTML = '';
+
+            savedLinks.forEach(url => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = url;
+                link.target = '_blank';
+                link.onmouseover = () => updateContent(url);
+                linkContainer.appendChild(link);
+            });
+        }
+
+        function clearLinks() {
+            if (confirm('Are you sure you want to clear all links?')) {
+                localStorage.removeItem('savedLinks');
+                document.getElementById('linkContainer').innerHTML = '';
+                alert('All links have been cleared!');
+            }
+        }
+
+        // Load links on page load
+        window.onload = loadLinks;
+    </script>
+</body>
+</html>
