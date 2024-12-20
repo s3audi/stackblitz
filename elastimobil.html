@@ -33,23 +33,21 @@
             margin-top: 10px;
             width: 100%;
             background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .result-item {
             padding: 10px;
             border-bottom: 1px solid #eee;
-            cursor: pointer;
         }
 
-        .result-item:last-child {
-            border-bottom: none;
+        .result-item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 16px;
         }
 
-        .result-item:hover {
-            background-color: #f1f1f1;
+        .result-item a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -63,7 +61,7 @@
         placeholder="Search..."
         oninput="performSearch()"
     >
-    <div class="results" id="resultsContainer" style="display: none;"></div>
+    <div class="results" id="resultsContainer"></div>
 </div>
 
 <script>
@@ -81,26 +79,15 @@
         const resultsContainer = document.getElementById('resultsContainer');
 
         if (query === '') {
-            resultsContainer.style.display = 'none';
             resultsContainer.innerHTML = '';
             return;
         }
 
         const results = data.filter(item => item.name.toLowerCase().includes(query));
 
-        if (results.length === 0) {
-            resultsContainer.style.display = 'none';
-            resultsContainer.innerHTML = '';
-        } else {
-            resultsContainer.style.display = 'block';
-            resultsContainer.innerHTML = results
-                .map(result => `<div class="result-item" onclick="goToLink('${result.url}')">${result.name}</div>`)
-                .join('');
-        }
-    }
-
-    function goToLink(url) {
-        window.open(url, '_blank');
+        resultsContainer.innerHTML = results
+            .map(result => `<div class="result-item"><a href="${result.url}" target="_blank">${result.name}</a></div>`)
+            .join('');
     }
 </script>
 
