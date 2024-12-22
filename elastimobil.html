@@ -19,14 +19,42 @@
             margin-top: 20px;
             width: 90%;
             max-width: 600px;
+            display: flex;
+            gap: 10px;
         }
 
         .search-box {
-            width: 100%;
+            flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
+        }
+
+        .add-button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+
+        .import-button, .export-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .import-button:hover, .export-button:hover {
+            background-color: #218838;
         }
 
         .results {
@@ -38,6 +66,9 @@
         .result-item {
             padding: 10px;
             border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .result-item a {
@@ -48,6 +79,32 @@
 
         .result-item a:hover {
             text-decoration: underline;
+        }
+
+        .action-buttons button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .edit-button:hover {
+            background-color: #e0a800;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -61,11 +118,14 @@
         placeholder="Search..."
         oninput="performSearch()"
     >
-    <div class="results" id="resultsContainer"></div>
+    <button class="add-button" onclick="addNewLink()">Add Link</button>
+    <button class="import-button" onclick="importLinks()">Import Links</button>
+    <button class="export-button" onclick="exportLinks()">Export Links</button>
 </div>
+<div class="results" id="resultsContainer"></div>
 
 <script>
-    const data = [
+    let data = [
         { name: 'Google', url: 'https://www.google.com' },
         { name: 'Facebook', url: 'https://www.facebook.com' },
         { name: 'Amazon', url: 'https://www.amazon.com' },
@@ -74,20 +134,92 @@
         { name: 'Instagram', url: 'https://www.instagram.com' },
     ];
 
+    document.addEventListener('DOMContentLoaded', () => {
+        performSearch();
+    });
+
     function performSearch() {
         const query = document.getElementById('searchBox').value.toLowerCase();
         const resultsContainer = document.getElementById('resultsContainer');
 
-        if (query === '') {
-            resultsContainer.innerHTML = '';
-            return;
-        }
-
-        const results = data.filter(item => item.name.toLowerCase().includes(query));
+        const results = data.map((item, originalIndex) => ({
+            ...item,
+            originalIndex
+        })).filter(item => item.name.toLowerCase().includes(query));
 
         resultsContainer.innerHTML = results
-            .map(result => `<div class="result-item"><a href="${result.url}" target="_blank">${result.name}</a></div>`)
+            .map(result => `
+                <div class="result-item">
+                    <a href="${result.url}" target="_blank" title="${result.url}">${result.name}</a>
+                    <div class="action-buttons">
+                        <button class="edit-button" onclick="editLink(${result.originalIndex})">Edit</button>
+                        <button class="delete-button" onclick="deleteLink(${result.originalIndex})">Delete</button>
+                    </div>
+                </div>
+            `)
             .join('');
+    }
+
+    function addNewLink() {
+        const name = prompt('Enter the name of the link:');
+        const url = prompt('Enter the URL of the link:');
+
+        if (name && url) {
+            data.push({ name, url });
+            performSearch();
+        }
+    }
+
+    function editLink(index) {
+        const newName = prompt('Edit the name of the link:', data[index].name);
+        const newUrl = prompt('Edit the URL of the link:', data[index].url);
+
+        if (newName && newUrl) {
+            data[index] = { name: newName, url: newUrl };
+            performSearch();
+        }
+    }
+
+    function deleteLink(index) {
+        if (confirm('Are you sure you want to delete this link?')) {
+            data.splice(index, 1);
+            performSearch();
+        }
+    }
+
+    function importLinks() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = event => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        data = importedData;
+                        performSearch();
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (error) {
+                    alert('Error reading file');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function exportLinks() {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'links.json';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 </script>
 

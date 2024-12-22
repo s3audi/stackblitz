@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenzül Arş Suresi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .number-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .numbers div {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .numbers div:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-button {
+            padding: 5px 10px;
+            background-color: #ffc107;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover {
+            background-color: #e0a800;
+        }
+
+        .sentence {
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 400px;
+        }
+
+        .sentence img {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 4px;
+        }
+
+        .sentence video {
+            margin-top: 10px;
+            max-width: 100%;
+            width: 500px;
+            border-radius: 4px;
+        }
+
+        .import-button, .export-button, .set-number-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .import-button:hover, .export-button:hover, .set-number-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="numbers" id="leftNumbersContainer"></div>
+    <div class="sentence" id="sentenceContainer">
+        Hover over a number to see the sentence
+        <img id="sentenceImage" src="" alt="" style="display: none;">
+        <video id="sentenceVideo" controls style="display: none;"></video>
+    </div>
+    <div class="numbers" id="rightNumbersContainer"></div>
+</div>
+
+<div>
+    <button class="set-number-button" onclick="setNumberOfSentences()">Set Number of Sentences</button>
+    <button class="import-button" onclick="importSentences()">Import Sentences</button>
+    <button class="export-button" onclick="exportSentences()">Export Sentences</button>
+</div>
+
+<script>
+    let sentences = [];
+    let keyBuffer = '';
+    let keyTimeout;
+    let currentIndex = -1;
+
+    function initializeSentences() {
+        const savedSentences = localStorage.getItem('sentences');
+        if (savedSentences) {
+            sentences = JSON.parse(savedSentences);
+            renderSentences();
+        } else {
+            setNumberOfSentences();
+        }
+    }
+
+    function setNumberOfSentences() {
+        const numSentences = prompt('How many sentences will there be?');
+        if (numSentences && !isNaN(numSentences)) {
+            sentences = Array.from({ length: Number(numSentences) }, (_, index) => ({
+                text: `Sentence ${index + 1}`,
+                img: '',
+                video: ''
+            }));
+            renderSentences();
+        } else {
+            alert('Invalid number of sentences');
+        }
+    }
+
+    const leftNumbersContainer = document.getElementById('leftNumbersContainer');
+    const rightNumbersContainer = document.getElementById('rightNumbersContainer');
+    const sentenceContainer = document.getElementById('sentenceContainer');
+    const sentenceImage = document.getElementById('sentenceImage');
+    const sentenceVideo = document.getElementById('sentenceVideo');
+
+    function renderSentences() {
+        leftNumbersContainer.innerHTML = '';
+        rightNumbersContainer.innerHTML = '';
+        sentences.forEach((sentence, index) => {
+            const numberItem = document.createElement('div');
+            numberItem.className = 'number-item';
+
+            const numberDiv = document.createElement('div');
+            numberDiv.textContent = index + 1;
+            numberDiv.addEventListener('mouseover', () => {
+                displaySentence(index);
+            });
+
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-button';
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', () => {
+                editSentence(index);
+            });
+
+            numberItem.appendChild(numberDiv);
+            numberItem.appendChild(editButton);
+
+            if (index < 11) {
+                leftNumbersContainer.appendChild(numberItem);
+            } else {
+                rightNumbersContainer.appendChild(numberItem);
+            }
+        });
+        localStorage.setItem('sentences', JSON.stringify(sentences));
+    }
+
+    function displaySentence(index) {
+        currentIndex = index;
+        const sentence = sentences[index];
+        sentenceContainer.firstChild.textContent = sentence.text;
+        sentenceImage.src = sentence.img;
+        sentenceImage.style.display = sentence.img ? 'block' : 'none';
+        sentenceVideo.src = sentence.video;
+        sentenceVideo.style.display = sentence.video ? 'block' : 'none';
+    }
+
+    function editSentence(index) {
+        const sentence = sentences[index];
+        const newText = prompt('Enter the new sentence text:', sentence.text);
+        const newImg = prompt('Enter the new image URL:', sentence.img);
+        const newVideo = prompt('Enter the new video URL:', sentence.video);
+        if (newText) {
+            sentence.text = newText;
+        }
+        if (newImg) {
+            sentence.img = newImg;
+        }
+        if (newVideo) {
+            sentence.video = newVideo;
+        }
+        if (sentenceContainer.firstChild.textContent === sentence.text) {
+            sentenceImage.src = newImg;
+            sentenceVideo.src = newVideo;
+        }
+        renderSentences();
+    }
+
+    function importSentences() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = event => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        sentences = importedData;
+                        renderSentences();
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (error) {
+                    alert('Error reading file');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function exportSentences() {
+        const blob = new Blob([JSON.stringify(sentences, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sentences.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    async function pasteClipboardToCurrentSentence() {
+        if (currentIndex !== -1) {
+            try {
+                const clipboardText = await navigator.clipboard.readText();
+                sentences[currentIndex].img = clipboardText;
+                renderSentences();
+                displaySentence(currentIndex);
+            } catch (error) {
+                alert('Failed to read clipboard contents');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeSentences);
+
+    document.addEventListener('keydown', event => {
+        if (event.key >= '0' && event.key <= '9') {
+            keyBuffer += event.key;
+            clearTimeout(keyTimeout);
+            keyTimeout = setTimeout(() => {
+                const index = parseInt(keyBuffer, 10) - 1;
+                if (index >= 0 && index < sentences.length) {
+                    displaySentence(index);
+                }
+                keyBuffer = '';
+            }, 300);
+        } else if (event.key === 'Enter' && currentIndex !== -1) {
+            editSentence(currentIndex);
+        } else if (event.key === 'i') {
+            importSentences();
+        } else if (event.key === 'e') {
+            exportSentences(); 
+        } else if (event.key === 's') {
+            setNumberOfSentences();
+        } else if (event.ctrlKey && event.shiftKey && event.key === '5') {
+            pasteClipboardToCurrentSentence();
+        } else if (event.key === 'ArrowRight' && currentIndex < sentences.length - 1) {
+            displaySentence(currentIndex + 1);
+        } else if (event.key === 'ArrowLeft' && currentIndex > 0) {
+            displaySentence(currentIndex - 1);
+        }
+    });
+</script>
+
+</body>
+</html>

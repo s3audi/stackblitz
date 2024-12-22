@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Search Style Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+
+        .search-container {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .results {
+            margin-top: 10px;
+            width: 100%;
+            background: #fff;
+        }
+
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 16px;
+        }
+
+        .result-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="search-container">
+    <input 
+        type="text" 
+        class="search-box" 
+        id="searchBox" 
+        placeholder="Search..."
+        oninput="performSearch()"
+    >
+    <div class="results" id="resultsContainer"></div>
+</div>
+
+<script>
+    const data = [
+        { name: 'Google', url: 'https://www.google.com' },
+        { name: 'Facebook', url: 'https://www.facebook.com' },
+        { name: 'Amazon', url: 'https://www.amazon.com' },
+        { name: 'Twitter', url: 'https://www.twitter.com' },
+        { name: 'YouTube', url: 'https://www.youtube.com' },
+        { name: 'Instagram', url: 'https://www.instagram.com' },
+    ];
+
+    function performSearch() {
+        const query = document.getElementById('searchBox').value.toLowerCase();
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        if (query === '') {
+            resultsContainer.innerHTML = '';
+            return;
+        }
+
+        const results = data.filter(item => item.name.toLowerCase().includes(query));
+
+        resultsContainer.innerHTML = results
+            .map(result => `<div class="result-item"><a href="${result.url}" target="_blank">${result.name}</a></div>`)
+            .join('');
+    }
+</script>
+
+</body>
+</html>

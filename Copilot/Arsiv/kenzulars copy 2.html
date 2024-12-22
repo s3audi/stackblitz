@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenzül Arş Suresi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .number-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .numbers div {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .numbers div:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-button {
+            padding: 5px 10px;
+            background-color: #ffc107;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover {
+            background-color: #e0a800;
+        }
+
+        .sentence {
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 300px;
+        }
+
+        .sentence img {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 4px;
+        }
+
+        .import-button, .export-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .import-button:hover, .export-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="numbers" id="numbersContainer"></div>
+    <div class="sentence" id="sentenceContainer">
+        Hover over a number to see the sentence
+        <img id="sentenceImage" src="" alt="" style="display: none;">
+    </div>
+</div>
+
+<button class="import-button" onclick="importSentences()">Import Sentences</button>
+<button class="export-button" onclick="exportSentences()">Export Sentences</button>
+
+<script>
+    let sentences = [];
+
+    function initializeSentences() {
+        const numSentences = prompt('How many sentences will there be?');
+        if (numSentences && !isNaN(numSentences)) {
+            sentences = Array.from({ length: Number(numSentences) }, (_, index) => ({
+                text: `Sentence ${index + 1}`,
+                img: ''
+            }));
+            renderSentences();
+        } else {
+            alert('Invalid number of sentences');
+        }
+    }
+
+    const numbersContainer = document.getElementById('numbersContainer');
+    const sentenceContainer = document.getElementById('sentenceContainer');
+    const sentenceImage = document.getElementById('sentenceImage');
+
+    function renderSentences() {
+        numbersContainer.innerHTML = '';
+        sentences.forEach((sentence, index) => {
+            const numberItem = document.createElement('div');
+            numberItem.className = 'number-item';
+
+            const numberDiv = document.createElement('div');
+            numberDiv.textContent = index + 1;
+            numberDiv.addEventListener('mouseover', () => {
+                sentenceContainer.firstChild.textContent = sentence.text;
+                sentenceImage.src = sentence.img;
+                sentenceImage.style.display = sentence.img ? 'block' : 'none';
+            });
+
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-button';
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', () => {
+                const newText = prompt('Enter the new sentence text:', sentence.text);
+                const newImg = prompt('Enter the new image URL:', sentence.img);
+                if (newText) {
+                    sentence.text = newText;
+                }
+                if (newImg) {
+                    sentence.img = newImg;
+                }
+                if (sentenceContainer.firstChild.textContent === sentence.text) {
+                    sentenceImage.src = newImg;
+                }
+                renderSentences();
+            });
+
+            numberItem.appendChild(numberDiv);
+            numberItem.appendChild(editButton);
+            numbersContainer.appendChild(numberItem);
+        });
+    }
+
+    function importSentences() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = event => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        sentences = importedData;
+                        renderSentences();
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (error) {
+                    alert('Error reading file');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function exportSentences() {
+        const blob = new Blob([JSON.stringify(sentences, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sentences.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeSentences);
+</script>
+
+</body>
+</html>
