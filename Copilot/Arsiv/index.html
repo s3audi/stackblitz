@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...existing code... -->
+</head>
+<body>
+    <!-- ...existing code... -->
+    <ul id="fileList"></ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchFileList);
+
+        async function fetchFileList() {
+            try {
+                const response = await fetch('/list-html-files'); // Endpoint to list HTML files in the directory
+                const files = await response.json();
+                const fileList = document.getElementById('fileList');
+                files.forEach(file => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = file;
+                    link.textContent = file;
+                    link.style.color = 'white';
+                    listItem.appendChild(link);
+                    fileList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching file list:', error);
+            }
+        }
+    </script>
+</body>
+</html>
