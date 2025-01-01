@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <style>
+        .slide-in-right {
+            animation: slide-in-right 2s forwards;
+        }
+
+        .slide-in-left {
+            animation: slide-in-left 2s forwards;
+        }
+
+        .slide-in-top {
+            animation: slide-in-top 2s forwards;
+            margin-bottom: 50px;
+        }
+
+        @keyframes slide-in-right {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide-in-left {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide-in-top {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        img {
+            width: 300px;
+            height: auto;
+        }
+
+        iframe {
+            width: 560px;
+            height: 315px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="your-image-url.jpg" alt="Image" class="slide-in-right">
+        <h2 class="slide-in-left">Your Text Here</h2>
+        <iframe class="slide-in-top" src="https://www.youtube.com/embed/joOy4DJNxp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</body>
+</html>

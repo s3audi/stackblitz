@@ -76,6 +76,20 @@
         button.delete-button:hover {
             background-color: #e60000;
         }
+
+        .import-button, .export-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .import-button:hover, .export-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +112,8 @@
         <div class="link-container" id="linkContainer">
             <!-- Links will be dynamically added here -->
         </div>
+        <button class="import-button" onclick="importLinks()">Import Links</button>
+        <button class="export-button" onclick="exportLinks()">Export Links</button>
     </div>
     <div class="right-panel">
         <iframe id="contentDisplay" src="about:blank"></iframe>
@@ -207,6 +223,70 @@
                 linkContainer.appendChild(row);
             });
         };
+
+        function importLinks() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = event => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (Array.isArray(importedData)) {
+                            const linkContainer = document.getElementById('linkContainer');
+                            linkContainer.innerHTML = '';
+                            importedData.forEach(linkData => {
+                                const row = document.createElement('div');
+                                row.className = 'link-row';
+                                row.draggable = true;
+
+                                const link = document.createElement('a');
+                                link.href = linkData.url;
+                                link.textContent = linkData.name;
+                                link.target = '_blank';
+                                link.onmouseover = () => updateContent(linkData.url);
+
+                                const deleteButton = document.createElement('button');
+                                deleteButton.textContent = 'Delete';
+                                deleteButton.className = 'delete-button';
+                                deleteButton.onclick = () => {
+                                    row.remove();
+                                    saveLinks();
+                                };
+
+                                row.appendChild(link);
+                                row.appendChild(deleteButton);
+                                linkContainer.appendChild(row);
+                            });
+                            saveLinks();
+                        } else {
+                            alert('Invalid file format');
+                        }
+                    } catch (error) {
+                        alert('Error reading file');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function exportLinks() {
+            const rows = document.querySelectorAll('#linkContainer .link-row');
+            const linkArray = Array.from(rows).map(row => {
+                const link = row.querySelector('a');
+                return { url: link.href, name: link.textContent };
+            });
+            const blob = new Blob([JSON.stringify(linkArray, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'links.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
 </html>
