@@ -91,6 +91,15 @@
         });
     </script>
 
+<style>
+    .airtable-embed {
+        width: 100%;
+        padding-top: 50%;
+    }
+</style>
+
+
+<iframe class="airtable-embed" src="https://airtable.com/embed/appKF1W8zxQDPgNAk/shrwPTN9qUczD0K3g" frameborder="0" onmousewheel="" width="100%" height="733" style="background: transparent; border: 1px solid #ccc;"></iframe>
 
 
 
@@ -193,63 +202,3 @@
             }
         }
     </style>
-
-
-<!--
-  açıldığında bakcground resmi gelsin
-    -->
-
-
-
-<script>
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            location.reload();
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        background.style.backgroundImage = "url('https://sun9-79.userapi.com/impg/Icd0Xey_3fXvDCxHr7oWldYBtbgHaGb8KMrAnQ/QVdOzgthAGo.jpg?size=1472x832&quality=95&sign=62c59670c5d47c33638f8d3b6de12d03&type=album')";
-    });
-</script>
-<script>
-    const menuItemsData = [
-        {
-            text: "Anasayfa",
-            bg: "url('https://sun9-79.userapi.com/impg/Icd0Xey_3fXvDCxHr7oWldYBtbgHaGb8KMrAnQ/QVdOzgthAGo.jpg?size=1472x832&quality=95&sign=62c59670c5d47c33638f8d3b6de12d03&type=album')"
-        },
-        {
-            text: "Hakkımızda",
-            bg: "url('https://sun9-68.userapi.com/impg/Vd3xUf9u-dOkktzs3QBB6lWNHcktts42LmBhaA/eX49AB73NA0.jpg?size=1472x832&quality=95&sign=a869f4697f53d0a1b7088ab3983fe0d3&type=album')"
-        },
-        {
-            text: "Services",
-            bg: "url('https://sun9-37.userapi.com/impg/3Xv5e5X4qRSdzy01jbG_0PgnERormdZ_WouGaQ/YfYX9_7RsnI.jpg?size=1472x832&quality=95&sign=403e7045bf1623cd6635ea4e9912a702&type=album')"
-        },
-        {
-            text: "Contact",
-            bg: "url('https://sun9-11.userapi.com/impg/3MulGgZlqJ3gg8Q4eZpxFPwrNVp-FUohAu990Q/1M7_quBV1mc.jpg?size=1472x832&quality=95&sign=17bcc7652b1f63f231388c99707d58b6&type=album')"
-        }
-    ];
-
-    const menuList = document.querySelector('.menu-items');
-    menuList.innerHTML = '';
-
-    menuItemsData.forEach(itemData => {
-        const li = document.createElement('li');
-        li.textContent = itemData.text;
-        li.setAttribute('data-bg', itemData.bg);
-        menuList.appendChild(li);
-    });
-
-    const menuItems = document.querySelectorAll('.menu-items li');
-    const background = document.getElementById('background');
-
-    menuItems.forEach(item => {
-        item.addEventListener('mouseover', () => {
-            background.style.backgroundImage = item.getAttribute('data-bg');
-        });
-    });
-</script>

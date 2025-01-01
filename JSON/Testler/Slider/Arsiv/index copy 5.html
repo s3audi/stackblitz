@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+    https://vk.com/album457241080_304934413
+    https://vk.com/docs  PNG logo vs
+
+    This function calculates the factorial of a given number.
+    It takes a single integer as input and returns the factorial of that number.
+    If the input is 0, the function returns 1 as 0! is defined to be 1.
+    The function uses a recursive approach to calculate the factorial.
+    -->
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Menu</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: "https://sun9-11.userapi.com/impg/3MulGgZlqJ3gg8Q4eZpxFPwrNVp-FUohAu990Q/1M7_quBV1mc.jpg?size=1472x832&quality=95&sign=17bcc7652b1f63f231388c99707d58b6&type=album";
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        .menu {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        .logo {
+            margin-left: 20px;
+            z-index: 99;
+        }
+        .menu-items {
+            display: flex;
+            list-style: none;
+            margin-right: 20px;
+            color: white;
+            font-family: 'Arial Narrow', Arial, sans-serif;
+        }
+        .menu-items li {
+            margin: 0 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    
+    <div class="menu">
+        <div class="logo">
+            <a href="http://semtasoft.com"></a>
+                <img src="https://psv4.userapi.com/s/v1/d/1G14hR2IrwtUwBcLwFeY1c3-ODOkRrA24nN97hD_hueMXAZKDYVg2mJ8iYKHLYYVzGX2l-_z-NRYikel5rU8fwbgz_7S2EN-N-vrRzYXnr4ixdzGXdOJgg/AylinSemaLogoBeyaz2.png" alt="Logo" width="300px">
+            </a>
+        </div>      
+        <ul class="menu-items">
+            <li data-bg="url('https://sun9-79.userapi.com/impg/Icd0Xey_3fXvDCxHr7oWldYBtbgHaGb8KMrAnQ/QVdOzgthAGo.jpg?size=1472x832&quality=95&sign=62c59670c5d47c33638f8d3b6de12d03&type=album')">Anasayfa</li>
+            <li data-bg="url('https://sun9-68.userapi.com/impg/Vd3xUf9u-dOkktzs3QBB6lWNHcktts42LmBhaA/eX49AB73NA0.jpg?size=1472x832&quality=95&sign=a869f4697f53d0a1b7088ab3983fe0d3&type=album')">Hakkımızda</li>
+            <li data-bg="url('https://sun9-37.userapi.com/impg/3Xv5e5X4qRSdzy01jbG_0PgnERormdZ_WouGaQ/YfYX9_7RsnI.jpg?size=1472x832&quality=95&sign=403e7045bf1623cd6635ea4e9912a702&type=album')">Services</li>
+            <li data-bg="url('https://sun9-11.userapi.com/impg/3MulGgZlqJ3gg8Q4eZpxFPwrNVp-FUohAu990Q/1M7_quBV1mc.jpg?size=1472x832&quality=95&sign=17bcc7652b1f63f231388c99707d58b6&type=album')">Contact</li>
+        </ul>
+    </div>
+
+    <script>
+        const menuItems = document.querySelectorAll('.menu-items li');
+        const background = document.getElementById('background');
+
+        menuItems.forEach(item => {
+            item.addEventListener('mouseover', () => {
+                background.style.backgroundImage = item.getAttribute('data-bg');
+            });
+        });
+    </script>
+
+<style>
+    .airtable-embed {
+        width: 100%;
+        padding-top: 50%;
+    }
+</style>
+
+
+<iframe class="airtable-embed" src="https://airtable.com/embed/appKF1W8zxQDPgNAk/shrwPTN9qUczD0K3g" frameborder="0" onmousewheel="" width="100%" height="733" style="background: transparent; border: 1px solid #ccc;"></iframe>
+
+
+
+</body>
+</html>
+
+<style>
+    .leaf {
+        position: absolute;
+        top: 2%;
+        left: 40%;
+        transform: translate(-250%, -0%) scale(0.8);
+        animation: float 11s;
+        width: 100px;
+        opacity: 0.7;
+        z-index: 1;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translate(10%, -150%) rotate(0deg) scale(1);
+        }
+        10% {
+            transform: translate(50%, 45%) rotate(90deg) scale(1);
+        }
+        0% {
+            transform: translate(100%, -50%) rotate(-180deg) scale(1);
+        }
+        10% {
+            transform: translate(-0%, 45%) rotate(90deg) scale(1);
+        }
+    }
+</style>
+
+<script>
+    const leaves = {
+        "Anasayfa": "img/yaprak.png",
+        "Hakkımızda": "img/yaprakPNG2.png",
+        "Services": "https://psv4.userapi.com/s/v1/d/BsivajmzERW-SVl3xA2y6u4R5_ljNIahI0qn40hhdboa0-tldqIRGl9vNhKk3NEQ_YlxD9V0WyVpByGkW2LrokoUOt6tKKGEnBWoNoU80kFDY18LjvEZ3w/YaprakPNG.png",
+        "Contact": "https://psv4.userapi.com/s/v1/d/DjybVjxEu9fmIAL9yjest6tmFxUInE8DuoXFb9ymdXZpp-m8MLb3_M_tZpAixYCMb-ZsSWq901bnU8BYI8M-oV9bc3WeU2VRPshKA0sFoYP8uNVpPg1OxA/YaprakPNG2.png"
+    };
+
+    menuItems.forEach(item => {
+        item.addEventListener('mouseover', () => {
+            background.style.backgroundImage = item.getAttribute('data-bg');
+            const leafImage = leaves[item.textContent];
+            if (leafImage) {
+                let leaf = document.querySelector('.leaf');
+                if (!leaf) {
+                    leaf = document.createElement('img');
+                    leaf.classList.add('leaf');
+                    document.body.appendChild(leaf);
+                }
+                leaf.src = leafImage;
+            }
+        });
+    });
+</script>
