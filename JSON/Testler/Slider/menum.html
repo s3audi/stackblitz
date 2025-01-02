@@ -1,0 +1,32 @@
+<div class="menu">
+    <div class="logo">
+        <img src="https://psv4.userapi.com/s/v1/d/5-1_vm6sV-AK395wGKzpxvuHe6aOz4sO8mXPux1FrK4dX8yu4iu8Bou3zqCMbg6gXz0Q1fqeLWKxEVQqQWFuXDikdrfG94WRtXVlOVu2PiT3eFVaKirKOw/AylinSemaLogoBeyaz3.png" alt="Logo" width="300px">
+    </div>
+    <ul class="menu-items">
+        <li data-bg="url('https://sun9-79.userapi.com/impg/Icd0Xey_3fXvDCxHr7oWldYBtbgHaGb8KMrAnQ/QVdOzgthAGo.jpg?size=1472x832&quality=95&sign=62c59670c5d47c33638f8d3b6de12d03&type=album')">Anasayfa</li>
+        <li data-bg="url('https://sun9-50.userapi.com/impg/zfBbXavdtmFIXMtZctLZTRyEpC_5XU8LbM90zA/df2YU-qymOo.jpg?size=1472x832&quality=95&sign=425fc578797e5a986168ffc5266ff679&type=album')">Hakkımızda</li>
+        <li data-bg="url('https://sun9-37.userapi.com/impg/3Xv5e5X4qRSdzy01jbG_0PgnERormdZ_WouGaQ/YfYX9_7RsnI.jpg?size=1472x832&quality=95&sign=403e7045bf1623cd6635ea4e9912a702&type=album')">Hizmetlerimiz</li>
+        <li data-bg="url('https://sun9-66.userapi.com/impg/3sxuir5eSyriDhl-HA-eUb59TMlG63SG_bFEsg/kb52rVrjLto.jpg?size=1472x832&quality=95&sign=8ae2d5aab773cf5020f8467475283732&type=album')">Contact</li>
+    </ul>
+</div>
+
+<script>
+    const menuItems = document.querySelectorAll('.menu-items li');
+    const background = document.getElementById('background');
+
+    menuItems.forEach(item => {
+        item.addEventListener('mouseover', () => {
+            background.style.backgroundImage = item.getAttribute('data-bg');
+        });
+    });
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            location.reload();
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        background.style.backgroundImage = "url('https://sun9-79.userapi.com/impg/Icd0Xey_3fXvDCxHr7oWldYBtbgHaGb8KMrAnQ/QVdOzgthAGo.jpg?size=1472x832&quality=95&sign=62c59670c5d47c33638f8d3b6de12d03&type=album')";
+    });
+</script>

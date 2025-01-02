@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Upload and Rotate</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            height: 100vh;
+            margin: 0;
+        }
+        .column {
+            flex: 1 1 20%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .column img {
+            max-width: 100%;
+            max-height: 200px;
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="column">
+        <input type="file" class="upload-photo" accept="image/*">
+        <img class="display-photo" src="" alt="Uploaded Photo">
+    </div>
+    <div class="column">
+        <input type="file" class="upload-photo" accept="image/*">
+        <img class="display-photo" src="" alt="Uploaded Photo">
+    </div>
+    <div class="column">
+        <input type="file" class="upload-photo" accept="image/*">
+        <img class="display-photo" src="" alt="Uploaded Photo">
+    </div>
+    <div class="column">
+        <input type="file" class="upload-photo" accept="image/*">
+        <img class="display-photo" src="" alt="Uploaded Photo">
+    </div>
+    <div class="column">
+        <input type="file" class="upload-photo" accept="image/*">
+        <img class="display-photo" src="" alt="Uploaded Photo">
+    </div>
+
+    <script>
+        document.querySelectorAll('.upload-photo').forEach((input, index) => {
+            input.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageData = e.target.result;
+                        document.querySelectorAll('.display-photo')[index].src = imageData;
+                        localStorage.setItem('uploadedPhoto' + index, imageData);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.display-photo').forEach((img, index) => {
+                const storedImage = localStorage.getItem('uploadedPhoto' + index);
+                if (storedImage) {
+                    img.src = storedImage;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
